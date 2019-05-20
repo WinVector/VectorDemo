@@ -1,0 +1,160 @@
+---
+title: "BoxesVectors"
+output: html_document
+---
+
+```{r}
+boxes <- read.csv("boxes.csv", 
+                  header = TRUE, 
+                  strip.white = TRUE,
+                  stringsAsFactors = FALSE)
+```
+
+```{r}
+head(boxes)
+```
+
+```{r}
+rownames(boxes) <- boxes$instance
+boxes$instance <- NULL
+
+print(boxes)
+```
+
+```{r}
+str(boxes)
+```
+
+```{r}
+colnames(boxes)
+```
+
+```{r}
+boxes[["width"]]
+```
+
+```{r}
+boxes[1, ]
+```
+
+```{r}
+box_2 = as.numeric(boxes["box 2", , drop = TRUE])
+
+print(box_2)
+```
+
+```{r}
+box_1 = as.numeric(boxes["box 1", , drop = TRUE])
+
+print(box_1)
+```
+
+```{r}
+print(box_1[[1]])
+```
+
+```{r}
+print(box_1[[2]])
+```
+
+```{r}
+print(box_1 / 2)
+```
+
+```{r}
+print(box_2 - box_1)
+```
+
+```{r}
+mean_square_diff <- function(v1, v2) {
+  mean((v1 - v2)^2)
+}
+```
+
+```{r}
+mean_square_diff(box_1, box_1)
+```
+
+```{r}
+mean_square_diff(box_1, box_2)
+```
+
+```{r}
+unit_scale <- function(vec) {
+  vec / sqrt(as.numeric(vec %*% vec))
+}
+```
+
+```{r}
+box_1_scaled <- unit_scale(box_1)
+
+print(box_1_scaled)
+```
+
+```{r}
+box_2_scaled <- unit_scale(box_2)
+
+print(box_2_scaled)
+```
+
+```{r}
+as.numeric(box_1_scaled %*% box_2_scaled)
+```
+
+```{r}
+center_unit_scale <- function(vec) {
+  vec <- vec - mean(vec)
+  vec <- vec / sqrt(as.numeric(vec %*% vec))
+  vec
+}
+```
+
+```{r}
+box_1_std = center_unit_scale(box_1)
+
+print(box_1_std)
+```
+
+```{r}
+box_2_std = center_unit_scale(box_2)
+
+print(box_2_std)
+```
+
+```{r}
+mean(box_1_std)
+```
+
+```{r}
+as.numeric(box_1_std %*% box_1_std)
+```
+
+```{r}
+as.numeric(box_1_std %*% box_2_std)
+```
+
+```{r}
+cor(box_1, box_2)
+```
+
+```{r}
+plot_frame <- data.frame(t(boxes))
+plot_frame$measure <- rownames(plot_frame)
+
+knitr::kable(plot_frame)
+
+library("ggplot2")
+
+ggplot(data = plot_frame,
+       mapping = aes(x = box_1, y = box_2, color = measure))  + 
+  geom_text(aes(label = measure)) +
+  geom_point() + 
+  ggtitle("box_1 compared to box_2 with feature labels",
+          subtitle = "(faithful representation, all information present)")
+
+ggplot(data = plot_frame,
+       mapping = aes(x = box_1, y = box_2))  + 
+  geom_point() + 
+  ggtitle("box_1 compared to box_2 without feature labels",
+          subtitle = "(scatterplot representation, measures co-mingled)")
+```
