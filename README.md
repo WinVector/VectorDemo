@@ -7,3 +7,4 @@ Support material for our video lecture series: [Vectors for Programmers and Data
   * [Vectors for Programmers and Data Scientists (with Python examples)](https://youtu.be/-UlILADHARI)
   * [Vectors for Programmers and Data Scientists (with R examples)](https://youtu.be/eRNT_qgaJus)
 
+(announcement [here](http://www.win-vector.com/blog/2019/05/free-video-lecture-vectors-for-programmers-and-data-scientists/))
